@@ -10,8 +10,8 @@
 
 from __future__ import unicode_literals
 import jaydebeapi
-from AwesomeFormat import AwesomeFormatKeyWords
 import traceback
+import os
 
 
 
@@ -37,8 +37,8 @@ class HiveKeywords(object):
         url = 'jdbc:hive2://{url}:{port}/default'.format(url=url, port=int(port))
         driver = 'org.apache.hive.jdbc.HiveDriver'
         if not jarpathlist:
-            jar1 = AwesomeFormatKeyWords()._abs_path(__file__, 'hadoop-common-2.6.2.jar')
-            jar2 = AwesomeFormatKeyWords()._abs_path(__file__, 'hive-jdbc-1.2.1-standalone.jar')
+            jar1 = os.path.join(os.path.dirname(__file__),'hadoop-common-2.6.2.jar')
+            jar2 = os.path.join(os.path.dirname(__file__), 'hive-jdbc-1.2.1-standalone.jar')
             jar_List = [jar1, jar2]
         else:
             jar_List = jarpathlist
