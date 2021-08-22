@@ -22,9 +22,9 @@ class TransCase():
     读取excel转换成yaml格式的testcase
     """
     def __init__(self, excel):
-        last_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-        self.excelfile = os.path.join(last_path,"testcase",excel)
-        _logfile = os.path.join(last_path,"run.log")
+        self.last_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+        self.excelfile = os.path.join(self.last_path,"testcase",excel)
+        _logfile = os.path.join(self.last_path,"run.log")
         self.workbook = ExcelOperate(self.excelfile)
         self.mylog = Logger(path=_logfile)
 
@@ -68,12 +68,14 @@ class TransCase():
         global case_no
         case_no = 0
         tablecase = {}
-        tablecase[tablename] = {}
         for i in pretablecase.keys():
             self.mylog.info("开始生成{}测试sql".format(i))
+            tablecase[i] = {}
             case_field = {}
             # todo:case_number 自动生成
             case_number = "testcase_"+ str(case_no)
+            self.mylog.info("生成{}测试sql".format(case_number))
+            tablecase[tablename][case_number] = {}
             case_no = case_no + 1
             case_tablename = str(i)
             case_field["case_name"] = "{}表结构对比测试".format(i)
@@ -81,17 +83,20 @@ class TransCase():
             case_field["case_expect"] = {}
             for each in pretablecase[i].keys():
                 case_field["case_expect"][each] = pretablecase[i][each]["字段类型"]
-            case_field["case_execute"] = self.structure_compare(tablename = case_tablename)
-            self.mylog.debug("{0}字段测试sql为：{1}".format(each,case_field["case_execute"]))
+            case_field["case_execute"] = self.structure_compare(tablename=case_tablename)
+            self.mylog.debug("{0}字段测试sql为：{1}".format(each, case_field["case_execute"]))
             tablecase[tablename][case_number] = case_field
         # 根据关键词构造测试sql
+
         for i in pretablecase.keys():
-            tablecase[i] = {}
-            case_field = {}
             # Todo:后续优化代码结构，此处冗余较多
+            self.mylog.info("开始生成{}维度测试sql".format(i))
             for each in pretablecase[i].keys():
+                case_field = {}
                 if pretablecase[i][each]["完整性"]:
                     case_number = "testcase_" + str(case_no)
+                    tablecase[tablename][case_number] = {}
+                    self.mylog.info("生成{}测试sql".format(case_number))
                     case_no = case_no + 1
                     case_field["case_name"] = "{}表{}字段完整性测试".format(i,each);
                     case_field["case_author"] = "zcding"
@@ -100,7 +105,9 @@ class TransCase():
                     tablecase[tablename][case_number] = case_field
                 elif pretablecase[i][each]["及时性"]:
                     case_number = "testcase_" + str(case_no)
+                    self.mylog.info("生成{}测试sql".format(case_number))
                     case_no = case_no + 1
+                    tablecase[tablename][case_number] = {}
                     case_field["case_name"] = "{}表{}字段及时性测试".format(i,each);
                     case_field["case_author"] = "zcding"
                     # 后续增加时间字段
@@ -109,6 +116,8 @@ class TransCase():
                     tablecase[tablename][case_number] = case_field
                 elif pretablecase[i][each]["唯一性"]:
                     case_number = "testcase_" + str(case_no)
+                    self.mylog.info("生成{}测试sql".format(case_number))
+                    tablecase[tablename][case_number] = {}
                     case_no = case_no + 1
                     case_field["case_name"] = "{}表{}字段及时性测试".format(i, each);
                     case_field["case_author"] = "zcding"
@@ -117,10 +126,19 @@ class TransCase():
                     tablecase[tablename][case_number] = case_field
                 else:
                     pass
-
-        print tablecase
-
         return tablecase
+
+    def write_to_yaml(self,case):
+        """
+        将case写到yaml文件中，按照表名、序号进行输出
+        :param case:
+        :return:
+        """
+        testcase_file = os.path.join(self.last_path,"testcase","testcase.yaml")
+        with open(testcase_file,"w")  as f:
+            yaml.dump(case,f,Dumper=yaml.RoundTripDumper,encoding='utf-8',allow_unicode=True,indent=1)
+
+        
 
     def generate_sql(self,tablename, field, key):
         """
@@ -146,8 +164,6 @@ class TransCase():
             # 一致性需要手动增加sql，通常表现为a推出b，数据清洗时可以不做关注
             #
             pass
-
-
         return sql
 
     def findindex(self,sheetname):
@@ -185,19 +201,14 @@ class TransCase():
         return desc_sql
 
 
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     trans = TransCase("数据清洗测试demo.xlsx")
     summry = trans.trans_summry()
+    table_case ={}
     for each in summry[1:]:
-        if  each:
-            trans.read_sheet(each)
+        case = {}
+        if each:
+            case = trans.read_sheet(each)
+            tablename = case.keys()[0]
+            table_case.update(case)
+    trans.write_to_yaml(table_case)
