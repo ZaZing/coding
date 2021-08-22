@@ -9,11 +9,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/excel_util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
+            <state relative-caret-position="3230">
               <caret line="170" column="44" selection-start-line="170" selection-start-column="44" selection-end-line="170" selection-end-column="44" />
               <folding>
                 <element signature="e#161#200#0" expanded="true" />
@@ -34,8 +34,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/transecase.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
+            <state relative-caret-position="152">
+              <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
               <folding>
                 <element signature="e#168#207#0" expanded="true" />
               </folding>
@@ -46,13 +46,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/log.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-11">
+            <state relative-caret-position="855">
               <caret line="47" column="42" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="42" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -69,11 +72,13 @@
     <option name="width" value="1750" />
     <option name="height" value="980" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -95,7 +100,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -178,17 +182,19 @@
       <option name="presentableId" value="Default" />
       <updated>1629258735580</updated>
       <workItem from="1629258739728" duration="17148000" />
+      <workItem from="1629620991365" duration="72000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17148000" />
+    <option name="totallyTimeSpent" value="17220000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="68" y="20" width="1400" height="784" extended-state="0" />
+    <frame x="-1874" y="32" width="1750" height="882" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24962743" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.25266272" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32924962" />
@@ -218,10 +224,14 @@
     <SUITE FILE_PATH="coverage/Demeter$excel_util.coverage" NAME="excel_util Coverage Results" MODIFIED="1629266767834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/util/excel.py">
+    <entry file="file://$PROJECT_DIR$/util/excel.py" />
+    <entry file="file://$PROJECT_DIR$/util/excel_util.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1425">
-          <caret line="312" column="30" selection-start-line="312" selection-start-column="26" selection-end-line="312" selection-end-column="30" />
+        <state relative-caret-position="3230">
+          <caret line="170" column="44" selection-start-line="170" selection-start-column="44" selection-end-line="170" selection-end-column="44" />
+          <folding>
+            <element signature="e#161#200#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -234,25 +244,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/util/log.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11">
+        <state relative-caret-position="855">
           <caret line="47" column="42" selection-start-line="47" selection-start-column="34" selection-end-line="47" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/excel_util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="170" column="44" selection-start-line="170" selection-start-column="44" selection-end-line="170" selection-end-column="44" />
-          <folding>
-            <element signature="e#161#200#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/transecase.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
+        <state relative-caret-position="152">
+          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
           <folding>
             <element signature="e#168#207#0" expanded="true" />
           </folding>

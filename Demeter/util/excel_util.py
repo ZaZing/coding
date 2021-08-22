@@ -15,6 +15,7 @@ import xlrd
 class ExcelOperate(object):
     """
     封装常见excel操作
+    !所有行、列号均以Excel为主，即第一行第一列表示Excel中第一个单元格
     """
     def __init__(self,excelfile):
         self.excelfile = excelfile
@@ -28,11 +29,10 @@ class ExcelOperate(object):
         :return:
         """
         try:
-            workbook = xlrd.open_workbook(self.excelfile)
+            wb = xlrd.open_workbook(self.excelfile)
         except Exception as e:
             print("打开文件{}错误".format(self.excelfile))
-        return  workbook
-
+        return wb
 
     def getsheetname(self):
         """
@@ -40,6 +40,8 @@ class ExcelOperate(object):
         :return:
         """
         return self.wb.sheet_names()
+
+
 
     def _get_sheet_content(self,sheetname):
         """
@@ -52,6 +54,10 @@ class ExcelOperate(object):
         else:
             return None
 
+    def get_max_rows(self, sheetname):
+        nrows = self._get_sheet_content(sheetname=sheetname).nrows + 1
+        return nrows
+
     def get_sheet_onecell(self, sheetname, rowindex, colindex):
         """
         获取sheet页上单元格内容，合并单元格返回第一格数据
@@ -62,7 +68,7 @@ class ExcelOperate(object):
         """
         _sheet= self._get_sheet_content(sheetname)
         merged = _sheet.merged_cells
-        rowindex = int(rowindex) -1
+        rowindex = int(rowindex) - 1
         colindex = int(colindex) - 1
         cell_value = _sheet.cell_value(rowindex, colindex)
         for (rlow,rhigh,clow,chigh) in merged:
@@ -84,7 +90,7 @@ class ExcelOperate(object):
         ws = self._get_sheet_content(sheetname)
         rows = self._get_sheet_content(sheetname).nrows
         cols = self._get_sheet_content(sheetname).ncols
-        row = int(rowindex) - 1
+        row = int(rowindex)
         row_res =[]
         if row > rows:
             print("当前{}页最大行{}，已超出".format(sheetname,rows+1))
@@ -105,9 +111,9 @@ class ExcelOperate(object):
         :return:
         """
         ws = self._get_sheet_content(sheetname)
-        rows = ws.nrows
-        cols = ws.ncols
-        col = int(colindex) - 1
+        rows = ws.nrows + 1
+        cols = ws.ncols + 1
+        col = int(colindex)
         col_res = []
         if col > cols:
             print("当前{}页最大列{}，已超出".format(sheetname,cols))
@@ -116,7 +122,7 @@ class ExcelOperate(object):
             print("输入列错误")
             col_res = list(col_res.append("") for i in range(rows))
         else:
-            for i in range(rows):
+            for i in range(1,rows):
                 col_cell = self.get_sheet_onecell(sheetname,i,col)
                 col_res.append(col_cell)
         return col_res
@@ -153,7 +159,7 @@ class ExcelOperate(object):
             col_res.append(res)
         return col_res
 
-    def get_sheet_by_coordinate(self, sheetname, startrow, startcol, endrow, endcol ,deal = False):
+    def get_sheet_by_coordinate(self, sheetname, startrow, startcol, endrow = None, endcol = None ,deal = False):
         """
         根据开始结束坐标返回结构化数据，按行返回数据，类型list
         :param sheet_name:
@@ -163,10 +169,11 @@ class ExcelOperate(object):
         :param endcol:
         :return:
         """
-        nrows = self._get_sheet_content(sheetname).nrows
-        ncols = self._get_sheet_content(sheetname).ncols
-        startrow = int(startrow) - 1
-        startcol = int(startcol) - 1
+        nrows = self._get_sheet_content(sheetname).nrows +1
+        print nrows
+        ncols = self._get_sheet_content(sheetname).ncols +1
+        startrow = int(startrow)
+        startcol = int(startcol)
         endrow = endrow if endrow else nrows
         endcol = endcol if endcol else ncols
         res = []
@@ -194,11 +201,11 @@ class ExcelOperate(object):
         :param sheetname:
         :return:
         """
-        wb = self._get_sheet_content(sheetname)
-        merge = wb.merged_cells
+        _sheet = self._get_sheet_content(sheetname)
+        merge = _sheet.merged_cells
         res = []
         for (rlow,rhigh,clow,chigh) in merge:
-            cell = self.get_sheet_onecell(rlow,clow)
+            cell = self.get_sheet_onecell(sheetname,rlow+1,clow+1)
             loaction = [rlow+1, rhigh+1 , clow+1, chigh+1]
             res.append([cell,loaction])
         return res
