@@ -44,7 +44,7 @@ class HiveKeywords(object):
             jar_List = jarpathlist
         self.conn = jaydebeapi.connect(driver,url,[user,password],jar_List)
         self.cursor = self.conn.cursor()
-		self.cursor.execute("set role admin;")
+        self.cursor.execute("set role admin;")
 
 
     def hive_execute_sql(self,sql):
