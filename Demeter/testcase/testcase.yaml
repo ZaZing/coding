@@ -1,0 +1,18 @@
+edw.dwd_ic_chattle_mo_c07:
+  testcase_1:
+    case_execute: select count(*) from edw.dwd_ic_chattle_mo_c07 where use_flag is
+      not null or use_flag == ''
+    case_expect: ''
+    case_author: zcding
+    case_name: edw.dwd_ic_chattle_mo_c07表use_flag字段完整性测试
+  testcase_0:
+    case_execute: desc edw.dwd_ic_chattle_mo_c07;
+    case_expect:
+      use_flag: string
+      source_time: string
+      search_company_name: string
+      trace_id: string
+      source_type: string
+      source_id: string
+    case_author: zcding
+    case_name: edw.dwd_ic_chattle_mo_c07表结构对比测试

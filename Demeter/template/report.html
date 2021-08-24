@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ result.title }}</title>
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+        background-color: #e6e8ea;
+        font-size: 14px;
+    }
+    .success{
+        color: green;
+    }
+    .failed{
+        color: red;
+    }
+    .error{
+        color: red;
+    }
+    .warning{
+        color: orange;
+    }
+    .success-bg{
+        background-color: #ddf7e6;
+    }
+    .failed-bg{
+        background-color: #f3cdcd;
+    }
+    .error-bg{
+        background-color: #f3cdcd;
+    }
+    .container{
+        background-color: white;
+        width: 90%;
+        padding: 15px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .flag{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .header{
+        /* position: absolute; */
+    }
+    .condition{
+        width: 100%;
+    }
+    .summary{
+        width: 100%;
+        /* float: left; */
+        margin-bottom: 10px;
+    }
+    .summary table{
+        width: 100%;
+        border: 1px solid #5b6a6d;
+        margin-bottom: 10px;
+    }
+    .summary table tbody td{
+        border-top: 1px solid grey
+    }
+    .summary table thead{
+        background-color: #5b6a6d;
+        color: white;
+    }
+
+    .common-table{
+        width: 100%;
+        border: 1px solid #5b6a6d;
+    }
+    .common-table tbody td{
+        border-top: 1px solid grey;
+        border-right: 1px solid grey;
+    }
+    .common-table thead{
+        background-color: #5b6a6d;
+        color: white;
+    }
+    .content{
+        
+    }
+    .footer{
+
+    }
+    .results{
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .results td{
+        padding: 15px;
+    }
+    .table-title{
+        background-color: #5b6a6d;
+        color: white;
+    }
+    .hide{
+        display: none;
+    }
+    .active{
+        /* display: 'block'; 会与表格冲突 */
+    }
+    .global-btns{
+        float: left;
+        text-align: right;
+        width: 50%;
+    }
+    table{
+        table-layout: fixed;
+    }
+</style>
+</head>
+<body>
+<div class="header container">
+    <h1 style="margin-top: 0; margin-bottom: 0; text-align: center">{{ result.title }}测试报告</h1>
+    <div class="condition">
+        <div>开始时间：{{ result.record_time.start_time}}</div>
+        <div>结束时间：{{ result.record_time.end_time}}</div>
+        <div>耗时：{{ result.record_time.execute_time}}</div>
+    </div>
+</div>
+<div class="content container">
+    <div>
+        <div class="summary">
+            <table style="width: 20%;">
+                <thead style="text-align: left">
+                    <tr>
+                        <th>分类</th>
+                        <th>总数</th>
+                        <th>失败数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>测试用例集</td>
+                        <td>{{ result.summary.testsuit.all }}</td>
+                        <td class="error">{{ result.summary.testsuit.failed }}</td>
+                    </tr>
+                    <tr>
+                        <td>用例</td>
+                        <td>{{ result.summary.testcase.all }}</td>
+                        <td class="error">{{ result.summary.testcase.failed }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--用例执行情况-->
+            <table>
+                <thead>
+                    <tr>
+                        <th>用例集</th>
+                        <th>用例编号</th>
+                        <th>用例名称</th>
+                        <th>执行情况</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for testsuit in result.summary.testsuit.results %}
+                    <tr>
+                        <td><a href="#{{ testsuit.name }}" class="{{ 'success' if testsuit.flag else 'error' }}">{{ testsuit.name }}</a></td>
+                        <td>
+                            {% for testcase in testsuit.testcase.results %}
+                            <div><a href="#{{ testcase.name }}" class="{{ 'success' if testcase.flag else 'error' }}">{{ testcase.name }}</a></div>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for testcase in testsuit.testcase.results %}
+                            <div><a href="#{{ testcase.count_all }}" class="success">{{ testcase.count_all }}</a></div>
+                            {% endfor %}
+                        </td>
+                        <td class="error">
+                            {% for testcase in testsuit.testcase.results %}
+                            <div>{{ testcase.count_error_all }} / <a href="#{{ testcase.testsuit }}_{{ testcase.name }}_loss_error">{{ testcase.count_loss_error}}</a> / <a href="#{{ testcase.testsuit }}_{{ testcase.name }}_value_error">{{ testcase.count_value_error }}</a></div>
+                            {% endfor %}
+
+                        </td>
+                        <td>
+                            {% for testcase in testsuit.testcase.results %}
+                            <div><a href="#{{ testcase.count_all }}" class="success">{{ testcase.count_all }}</a></div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="global-btns">
+        </div>
+    </div>
+    <div>
+        {% for testsuit in result.testsuits %}
+        <div id="{{ testsuit.name }}">
+            <div>
+                <h2><a href="javascript:;" class="{{ 'success' if testsuit.flag else 'error' }}" onclick="toggle('{{ testsuit.name }}')">{{ testsuit.name }}</a></h2>
+            </div>
+            <div>
+                {% for testcase in testsuit.results %}
+                <div class="testcase" id="{{ testsuit.name }}_{{ testcase.name }}">
+                    <div><h3><a href="javascript:;" onclick="toggle('{{ testsuit.name }}_{{ testcase.name }}')" class="{{ 'success' if testcase.flag else 'error' }}">{{ testcase.name }}</a></h3></div>
+                    <div class="extend hide">
+                        <h4>用例执行时间：{{ testcase.execute_time }} s</h4>
+                        <div style="width:40%">
+                            <h4>根据用例sql的数据量统计如下：</h4>
+                            <table>
+                                <tr>
+                                    <td>目标表的数据量（未去重）：</td>
+                                    <td>{{ testcase.row_summary.to_table_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>来源表的重复数据量：</td>
+                                    <td>{{ testcase.row_summary.row_from_duplicate }}</td>
+                                </tr>
+                                <tr>
+                                    <td>目标表的重复数据量：</td>
+                                    <td>{{ testcase.row_summary.row_to_duplicate }}</td>
+                                </tr>
+                                <tr>
+                                    <td>只存在于来源表不存在与目标表的数据量：</td>
+                                    <td>{{ testcase.row_summary.row_from_only }}</td>
+                                </tr>
+                                <tr>
+                                    <td>只存在于目标表不存在于来源表的数据量：</td>
+                                    <td>{{ testcase.row_summary.row_to_only }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="width:40%; ">
+                            <h4>根据用例sql的比对字段如下：</h4>
+                            <table class="common-table">
+                                <thead>
+                                    <tr>
+                                        <th>来源sql中的字段</th>
+                                        <th>目标sql中的字段</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for col in testcase.column_summary %}
+                                    <tr class="{{ '' if col.flag else 'error-bg' }}">
+                                        <td>{{ col.from_field }} ({{ col.from_type }}) </td>
+                                        <td>{{ col.to_field }} ({{ col.to_type }}) </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="extend hide">
+                        <div id="{{ testsuit.name }}_{{ testcase.name }}_loss_error">
+                            <h3>不存在 [ {{ testcase.row_summary.row_from_only }} ]</h3>
+                            {% if testcase.row_summary.row_from_only == 0 %}
+                            <table>暂无</table>
+                            {% else %}
+                            <table class="results" style="display:block; overflow-x:auto">
+                                <tr class="table-title">
+                                    {% for key in testcase.data_loss_error_key %}
+                                        <td>{{ key }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% for row in testcase.data_loss_error %}
+                                <tr class="error-bg">
+                                    {% for key_ in testcase.data_loss_error_key %}
+                                    <td>{{ row[key_] }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endif %}
+                        </div>
+                        <div id="{{ testsuit.name }}_{{ testcase.name }}_value_error">
+                            <h3>不一致 [ {{ testcase.data_value_error_count }} ]</h3>
+                            {% if testcase.data_value_error_count == 0 %}
+                            <table>暂无</table>
+                            {% else %}
+                            <table class="results" style="display:block; overflow-x:auto">
+                                <tr class="table-title">
+                                    {% for key in testcase.data_value_error_key %}
+                                        <td>{{ key }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% for row in testcase.data_value_error %}
+                                <tr class="error-bg">
+                                    {% for key_ in testcase.data_value_error_key %}
+                                    <td>{{ row[key_] }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="footer container">
+    <div>
+        <div style="text-align: right; color: grey">galvo. designed by Nick</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var d = document;
+
+    function toggle(id){
+        var obj = d.getElementById(id)
+        var childrens = obj.getElementsByClassName('extend')
+        for (var child of childrens ) {
+                if (child.classList.contains('hide')) {
+                    child.classList.remove('hide')
+                }else{
+                    child.classList.add('hide')
+                }
+            }
+    }
+</script>
+</body>
+</html>
