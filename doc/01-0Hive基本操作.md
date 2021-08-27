@@ -199,46 +199,74 @@ INSERT [OVERWRITE] INTO TABLE tablename [PARTITION(partcol1 = col1,partcol2 ='${
 
 提供了丰富的SQL查询方式来分析存储在Hadoop 分布式文件系统中的数据，可以将结构化的数据文件映射为一张数据库表，并提供完整的SQL查询功能，可以将SQL语句转换为MapReduce任务进行运行，通过自己的SQL 去查询分析需要的内容，这套SQL 简称Hive SQL，使不熟悉mapreduce 的用户很方便的利用SQL 语言查询，汇总，分析数据。
 
-#### 字符函数
+##### 字符函数
 
 说明：对字符进行拼接、截取、去空格
 
 枚举：concat、concat_ws、substring、trim、lpad、rpad、split、find_in_set
 
-##### concat
+concat
 
 说明：拼接函数
 
 ```sql
 ```
 
-##### concat_ws
+concat_ws
 
 
 
-##### substring
+substring
 
-##### trim
+trim
 
-##### Ipad
+Ipad
 
-##### rpad
-
-
+rpad
 
 
 
-#### 聚合函数
 
-#### 数学函数
 
-#### 时间函数
+##### 聚合函数
 
-#### 窗口函数
+##### 数学函数
 
-#### 条件函数
+##### 时间函数
 
-JOIN
+说明：时间获取、格式化、2个时间相差、时间增加、时间减少
+
+枚举：unix_timestamp、FROM_UNIXTIME、to_date、weekofyear、weekofyear、datediff、date_add、date_sub
+
+```
+from_unixtime：时间戳转日期函数
+unix_timestamp:日期转时间戳函数
+# 
+
+```
+
+
+
+##### 窗口函数
+
+##### 条件函数
+
+#### JOIN
 
 ### 数据导出
+
+#### Hive表导
+
+```sql
+INSERT OVERWRITE [LOCAL] DIRECTORY '/home/hadoop/output' ROW FORMAT DELIMITED FIELDS TERMINATED by ',' select * from testA;  
+```
+
+```
+# 直接执行sql
+./hive -e "select * from testA" >> /home/hadoop/output/testA.txt
+# 执行sql文件
+./hive -f /home/hadoop/output/sql.sql >> /home/hadoop/output/testB.txt  
+```
+
+
 
