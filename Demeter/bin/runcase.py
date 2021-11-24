@@ -43,7 +43,6 @@ class RunCase(object):
         """
         with io.open(self.testcase,"r",encoding= "utf-8") as f:
             testcases = yaml.load(f)
-        print testcases
         for tablename in testcases.keys():
             self.mylog.info("开始执行{}的测试用例".format(tablename))
             for each in testcases[tablename].keys():
@@ -58,9 +57,22 @@ class RunCase(object):
         输出html报告
         :return:
         """
-
-    def compare(self):
         pass
+
+    def compare(self,mode,res):
+        """
+
+        :param mode:
+        :return:
+        """
+        expect = res['case_expect']
+        actual = res['actual_res']
+        if mode == "decs":
+            pass
+
+
+
+
 
 if __name__ == "__main__":
     runcase = RunCase()
