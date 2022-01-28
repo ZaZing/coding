@@ -1,1 +1,9 @@
-*workspace.xml
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+#pycharm
+.idea/workspace.xml 
